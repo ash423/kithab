@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-a!!8clnnn9h*om+e@=!8u&$wo1924$@cs5hi8r*zzgz0bi_rhw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0']
 
 
 # Application definition
@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'orders',
     'userprofile',
     'trialdemo',
-    'debug_toolbar'
+
 ]
 
 MIDDLEWARE = [
@@ -56,7 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+
     
 ]
 
@@ -119,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Kolkata'
+TIME_ZONE = 'Asia/Kolkata``'
 
 USE_I18N = True
 

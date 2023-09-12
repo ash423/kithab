@@ -25,7 +25,7 @@ def shop(request,category_id):
         'languages' : languages,
         'covers' : covers
     }
-    return render(request,"book_store\shop.html",context)
+    return render(request,"book_store/shop.html",context)
 
 def search(request):
     search = request.POST['search']
@@ -44,7 +44,7 @@ def search(request):
         'languages' : languages,
         'covers' : covers
     }
-    return render(request,"book_store\shop.html",context)
+    return render(request,"book_store/shop.html",context)
 
 def sort(request,sort_id):
     num = 0
@@ -73,7 +73,7 @@ def sort(request,sort_id):
         'languages' : languages,
         'covers' : covers
     }
-    return render(request,"book_store\shop.html",context)
+    return render(request,"book_store/shop.html",context)
 
 
 def applyfilter(request):
@@ -118,7 +118,7 @@ def applyfilter(request):
         'languages' : languages,
         'covers' : covers
     }
-    return render(request,"book_store\shop.html",context)
+    return render(request,"book_store/shop.html",context)
 
 def trial(request):
     return render(request,"book_store/trial.html")
@@ -129,7 +129,7 @@ def home(request):
     context = {
         'categories':categories
     }
-    return render(request,"book_store\landingpage.html",context)
+    return render(request,"book_store/landingpage.html",context)
 
 def product_details(request, book_id, variantid):
     book = Book.objects.get(id=book_id)
