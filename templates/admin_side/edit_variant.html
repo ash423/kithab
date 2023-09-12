@@ -1,0 +1,48 @@
+{% extends 'admin_side\ttt.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid" style="margin-top: 130px; font-family: 'Josefin Sans', sans-serif;margin-bottom:20px;">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            {% if error %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ error }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title fw-semibold mb-4 text-center">EDIT VARIANT</h5>
+                    <form action="#" method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Book : {{book}}</label>
+
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Language : {{language}}</label>
+
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">CoverType : {{cover}}</label>
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_price" class="form-label">Price<span class="text-danger">*</span></label>
+                            <input type="number" step="0.01" class="form-control" id="id_price" name="discount" value="{{price}}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_stock" class="form-label">Stock<span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="id_stock" name="quantity" value="{{stock}}">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Make Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

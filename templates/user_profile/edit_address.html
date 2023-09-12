@@ -1,0 +1,86 @@
+{% extends "user_profile/userprofile_base.html" %}
+{% block title %}Edit Address{%endblock%}
+
+{% block profile_content %}
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4 d-flex justify-content-center">
+                    <div class="col-sm-12 col-xl-9 ">
+                        <div class="bg-light rounded h-100 p-4">
+
+                            <form class="login-form" action="" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+
+                                <h6 class="mb-4">CONTACT DETAILS</h6>
+
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        placeholder="Name" required>
+                                    <label for="name">Name*</label>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="number" name="number"
+                                        placeholder="Enter Mobile Number">
+                                    <label for="number">Mobile No*</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <textarea class="form-control" placeholder="Enter Your Address"
+                                        id="address" name="address" style="height: 150px;"></textarea>
+                                    <label for="address">Address</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="city" name="city"
+                                           placeholder="Enter City">
+                                    <label for="city">City</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="state" name="state"
+                                           placeholder="Enter State">
+                                    <label for="state">State</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="district" name="district"
+                                           placeholder="Enter District">
+                                    <label for="district">District</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="landmark" name="landmark"
+                                           placeholder="Enter Landmark">
+                                    <label for="landmark">Landmark</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="pincode" name="pincode"
+                                           placeholder="Enter Pincode">
+                                    <label for="pincode">Pincode</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="country" name="country"
+                                           placeholder="Enter Country">
+                                    <label for="country">Country</label>
+                                </div>
+
+
+
+                                <button type="submit" class="btn btn-primary">Add</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                function previewImage(event) {
+                    var input = event.target;
+                    var reader = new FileReader();
+
+                    reader.onload = function() {
+                        var imgElement = document.getElementById('preview');
+                        imgElement.src = reader.result;
+                        imgElement.style.display = 'block';
+                    };
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            </script>
+
+
+{% endblock profile_content %}

@@ -1,0 +1,122 @@
+{% extends 'book_store\base.html' %}
+{%block title%} Order Details {% endblock %}
+{% block style %}
+<style>
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+
+<div class="container mt-5">
+    {% for msg in messages %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                {% if msg.tags == 'error' %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {% elif msg.tags == 'success' %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {% else %}
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            {% endif %}
+                            {{ msg }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+    <h2>Order Details</h2>
+    Order Id :{{order.id}}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Product Image</th>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Price for one</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in order_items %}
+        <tr>
+            <td>
+                <img src="{{item.variant.book_id.cover_image.url}}" alt="item" width="50">
+            </td>
+            <td>{{item.variant}}</td>
+            <td>{{item.quantity}}</td>
+            <td>{{item.price}}</td>
+        </tr>
+         {% endfor%}
+        <!-- Add more rows for other products -->
+        </tbody>
+    </table>
+    <div class="container mt-5">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Label</th>
+                <th>Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Address</td>
+                <td>{{order.address}}</td>
+            </tr>
+            <tr>
+                <td>Payment Method</td>
+                <td>{{order.payment_method}}</td>
+            </tr>
+            <tr>
+                <td>Payment Status</td>
+                <td>{{order.payment_status}}</td>
+            </tr>
+            <tr>
+                <td>Coupon Applied</td>
+                <td>{{order.coupon}}</td>
+            </tr>
+            <tr>
+                <td>Discount</td>
+                <td>{{order.discount}}</td>
+            </tr>
+            <tr>
+                <td>Order Staus</td>
+                <td>{{order.order_status}}</td>
+            </tr>
+            <tr>
+                <td>Total Price</td>
+                <td>{{order.price_after_discount}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="container mt-5 center">
+            {% if order.order_status != 'Delivered' %}
+            {% if order.order_status != 'Returned' and order.order_status != 'Cancelled' %}
+            <a href ="{% url 'cancel_order' order.id %}"> <button class="btn btn-danger btn-lg mx-2">Cancel</button></a>
+            {% endif %}
+            {% elif order.order_status == 'Delivered' %}
+            {% if ret == 0 %}
+            <a href="{% url 'return_order' order.id %}"><button class="btn btn-success btn-lg mx-2">Return</button></a>
+            {% endif %}
+            {% endif %}
+            <div class="download-button-container">
+                <a href="{% url 'download_invoice' order.id %}" class="download-button" style="text-decoration:None;">Download Invoice</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bootstrap JS and jQuery -->
+
+
+
+
+</div>
+{% endblock %}

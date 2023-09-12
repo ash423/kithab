@@ -1,0 +1,65 @@
+{% extends "book_store/base.html" %}
+{% load static %}
+{% block style %}
+    <link href="{% static 'store/css/user_profilee.css' %}" rel="stylesheet">
+<!--    <link href="{% static 'adminpanel/css/style.css' %}" rel="stylesheet">-->
+
+{% endblock %}
+
+{% block content %}
+
+<div class="main">
+  <div class="m-5">
+    <section class="section profile">
+      <div class="row">
+        <div class="col-xl-3">
+
+          <div class="card">
+            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+
+              <img src="https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" height ="100px" wwidth="100px" alt="Profile" class="rounded-circle">
+              <h2>{{ user.username }}</h2>
+              {{ user.email }}
+              <div class="social-links mt-2">
+                <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+              <div class="navbar-nav w-100">
+                    <a href="{% url 'user_profile' %}" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="{% url 'address_management' %}" class="nav-item nav-link"><i class="fa fa-user me-2"></i>Address Management</a>
+                <a href="{% url 'change_password' %}" class="nav-item nav-link"><i class="fa fa-user me-2"></i>Change Password</a>
+              </div>
+              <ul class="nav nav-tabs nav-tabs-bordered">
+
+
+
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-9">
+          <div class="card">
+            <div class="card-body pt-3">
+              <!-- Bordered Tabs -->
+                {% block profile_content %}{% endblock %}
+              <!-- End Bordered Tabs -->
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+
+
+{% endblock content %}

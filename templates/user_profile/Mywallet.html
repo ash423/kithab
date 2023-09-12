@@ -1,0 +1,54 @@
+{% extends 'book_store\base.html' %}
+{%block title%} My Orders {% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>My Wallet Balance : {{balance}}</h2>
+
+
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Amount</th>
+      <th>Date</th>
+      <th>Transaction Type</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    {% for transaction in transactions %}
+    <tr>
+      {% if transaction.transaction_type == 'Debit' %}
+      <td style="color: green;">{{transaction.amount}}</td>
+      {% else %}
+      <td style="color: red;">{{transaction.amount}}</td>
+      {% endif %}
+      <td>{{transaction.date}}</td>
+      <td>{{transaction.transaction_type}}</td>
+
+    </tr>
+    {% endfor %}
+    <!-- Add more rows for other orders -->
+    </tbody>
+  </table>
+  <div class="pagination  d-flex justify-content-end me-5 pe-5">
+    {% if orders.has_previous %}
+    <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+    <a class="btn btn-outline-info mb-4" href="?page={{ orders.previous_page_number }}">Prev</a>
+    {% endif %}
+
+    {% for num in orders.paginator.page_range %}
+    {% if orders.number == num %}
+    <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+    {% elif num > orders.number|add:'-3' and num < orders.number|add:'3' %}
+    <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+    {% endif %}
+    {% endfor %}
+
+    {% if orders.has_next %}
+    <a class="btn btn-outline-info mb-4" href="?page={{ orders.next_page_number }}">Next</a>
+    <a class="btn btn-outline-info mb-4" href="?page={{ orders.paginator.num_pages}}">Last</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'admin_side\ttt.html' %}
+{%block title%} Order Details {% endblock %}
+{% block content %}
+
+<div class="container mt-5">
+    <h2>Order Details</h2>
+    Order Id :{{id}}<br>
+    Username : {{name}}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Product Image</th>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Price for one</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in order_items %}
+        <tr>
+            <td>
+                <img src="{{item.variant.book_id.cover_image.url}}" alt="item" width="50">
+            </td>
+            <td>{{item.variant}}</td>
+            <td>{{item.quantity}}</td>
+            <td>{{item.price}}</td>
+        </tr>
+         {% endfor%}
+        <!-- Add more rows for other products -->
+        </tbody>
+    </table>
+    <div class="container mt-5">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Label</th>
+                <th>Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Address</td>
+                <td>{{order.address}}</td>
+            </tr>
+            <tr>
+                <td>Payment Method</td>
+                <td>{{order.payment_method}}</td>
+            </tr>
+            <tr>
+                <td>Payment Status</td>
+                <td>{{order.payment_status}}</td>
+            </tr>
+            <tr>
+                <td>Coupon Applied</td>
+                <td>{{order.coupon}}</td>
+            </tr>
+            <tr>
+                <td>Discount</td>
+                <td>{{order.discount}}</td>
+            </tr>
+            <tr>
+                <td>Order Staus</td>
+                <td>{{order.order_status}}</td>
+            </tr>
+            <tr>
+                <td>Total Price</td>
+                <td>{{order.price_after_discount}}</td>
+            </tr>
+            </tbody>
+        </table>
+</div>
+{% endblock %}

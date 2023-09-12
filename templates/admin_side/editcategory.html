@@ -1,0 +1,24 @@
+{% extends 'admin_side\ttt.html' %}
+
+{% block content %}
+
+<form action="/editcategory/{{category.id}}/" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label class="form-label" for="cname">Enter Name</label>
+        <input type="text" id="cname" name="cname" class="form-control form-control-lg" placeholder="{{category.name}}" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="img">Choose Image</label>
+        <input type="file" name="img" id="img" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="desc">Add Description</label>
+        <textarea name="desc" id="desc" class="form-control" placeholder="Enter text here" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary btn-block btn-lg gradient-custom-4 text-body">Done</button>
+
+</form>
+</body>
+
+{% endblock %}

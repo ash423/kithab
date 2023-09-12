@@ -1,0 +1,63 @@
+{% extends "user_profile/userprofile_base.html" %}
+{% block title %}User Profile {%endblock%}
+
+{% block profile_content %}
+
+
+              <ul class="nav nav-tabs nav-tabs-bordered">
+
+                <li class="nav-item">
+                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+                </li>
+
+              </ul>
+              <div class="tab-content pt-2">
+
+                <div class="tab-pane fade show active profile-overview" id="profile-overview">
+<!--                  <h5 class="card-title">About</h5>-->
+<!--                  <p class="small fst-italic">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</p>-->
+
+                  <h5 class="my-4">Profile Details</h5>
+                    {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label ">Userame</div>
+                    <div class="col-lg-9 col-md-8">{{ user.username }}</div>
+                  </div>
+
+<!--                  <div class="row">-->
+<!--                    <div class="col-lg-3 col-md-4 label">Company</div>-->
+<!--                    <div class="col-lg-9 col-md-8">Lueilwitz, Wisoky and Leuschke</div>-->
+<!--                  </div>-->
+
+<!--                  <div class="row">-->
+<!--                    <div class="col-lg-3 col-md-4 label">Job</div>-->
+<!--                    <div class="col-lg-9 col-md-8">Web Designer</div>-->
+<!--                  </div>-->
+
+<!--                  <div class="row">-->
+<!--                    <div class="col-lg-3 col-md-4 label">Country</div>-->
+<!--                    <div class="col-lg-9 col-md-8">USA</div>-->
+<!--                  </div>-->
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Address</div>
+                    <div class="col-lg-9 col-md-8">{{ address.address }}, {{ address.city }}, {{ address.district }}, {{ address.state }}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Phone</div>
+                    <div class="col-lg-9 col-md-8">{{ address.mobile }}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Email</div>
+                    <div class="col-lg-9 col-md-8">{{ user.email }}</div>
+                  </div>
+
+                </div>
+
+
+{% endblock profile_content %}

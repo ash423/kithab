@@ -1,0 +1,69 @@
+{% extends "user_profile/userprofile_base.html" %}
+{% block title %}Address Management{%endblock%}
+{% block profile_content %}
+<style>
+
+    .border-box {
+        margin-left: 10px;
+        width: 265px;
+        height: 300px;
+        flex-direction: column;
+    }
+     .addressList-base-addBlock {
+      border: 1px dashed #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+</style>
+
+<h2 class="fw-bold m-3">Addresses</h2>
+
+<div class="d-flex flex-wrap p-3">
+     <div class="col-lg-4 mb-4">
+        <div class="fixed-box" data-action="add">
+            <a href="{% url 'add_address' %}" class="border-box  addressList-base-addBlock rounded p-3 d-flex justify-content-center align-items-center">
+                <div class="">Add Address</div>
+            </a>
+        </div>
+    </div>
+
+    {% for address in addresses %}
+    <div class="col-lg-4 mb-4">
+        <div class="fixed-box">
+            <div class="border-box border rounded p-3 d-flex justify-content-between">
+                <div>
+                    {% if address.is_default %}
+                    <div class="border-bottom">
+                        <h6>Default</h6>
+                    </div>
+                    {% endif %}
+                    <h6 class="fw-bold mt-3">{{ address.name }}</h6>
+                    <h6>{{ address.address }}</h6>
+                    <h6>{{ address.landmark }}</h6>
+                    <h6>{{ address.city }}, {{ address.pincode }}</h6>
+                    <h6>{{ address.district }}, {{ address.state }}</h6>
+                    <h6>Phone number: {{ address.mobile }}</h6>
+
+                </div>
+                <div class="d-flex justify-content-start">
+                    <a href="{% url 'edit_address' address.id %}"><h6>Edit</h6></a>
+                    <h6 class="fw-bold mx-1">|</h6>
+                    <div><a href="{% url 'delete_address' address.id %}"><h6>Remove</h6></a></div>
+                    {% if not address.is_default %}
+                    <h6 class="fw-bold mx-1">|</h6>
+                    <div><a href="{% url 'set_as_default' address.id %}"><h6>Set as Default</h6></a></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+
+{% endblock profile_content %}

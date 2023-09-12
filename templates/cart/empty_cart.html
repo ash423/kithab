@@ -1,0 +1,37 @@
+{% extends "book_store/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+
+
+
+
+<div class="container-fluid  mt-100">
+				 <div class="row d-flex justify-content-center mt-5">
+
+					<div class="col-lg-4">
+
+							<div class="card">
+
+						<div class="card-body-m cart d-flex justify-content-center">
+								<div class="col-sm-12 empty-cart-cls text-center">
+									<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlXPQAPAqx9T0_s1UIVP_ZDrmdPkmoNyLxl-t338Yz&s" class="img-fluid mb-4 mr-3" style="width: 320px; height: 250px;">
+									<h4><strong>Your Cart is Empty</strong></h4>
+									<h6>Add something to make me happy :)</h6>
+									<a href="{% url 'shop' 0 %}" class="btn btn-success cart-btn-transform m-3" data-abc="true">Continue Shopping</a>
+
+
+								</div>
+						</div>
+				</div>
+
+
+					</div>
+
+				 </div>
+
+				</div>
+{% endblock content %}
+

@@ -1,0 +1,234 @@
+{% extends "book_store/base.html" %}
+{%block title%} Cart {% endblock %}
+{% load static %}
+
+{% block style %}
+  <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <link href="{% static 'store/css/stylee.css' %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+{% for msg in messages %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            {% if msg.tags == 'error' %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {% elif msg.tags == 'success' %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {% else %}
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        {% endif %}
+                        {{ msg }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+
+
+{% if total_item_count == 0 %}
+<div class="container justify-content-center py-4 mt-4">
+    <div class="row d-flex justify-content-center align-items-center">
+        <div class="col-xl-6">
+            <div class="card text-black align-items-center" style="border: 1px solid #0B1C39; padding: 30px; background:white;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card-body p-md-4 ">
+                            <div class="message-container">
+                                <div class="verification-box ">
+                                    <h1>Oops...! Your Cart Is Empty !</h1>
+                                    <img class="verification-image" src="{% static 'images/banner1.jpg' %}" alt="Verification Image" style="height:40vh">
+                                </div>
+                            </div>
+                            <div class="text-center">  <!-- Add a new div with text-center class for centering the button -->
+                                <a href="{% url 'shop' 0 %}" class="btn mt-3" style="background-color: #0B1C39;color:white;padding-bottom:10px;">Shop Now</a>  <!-- Add btn-primary class for a Bootstrap-styled button -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+ <!-- Cart Start -->
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5">
+            <div class="col-lg-8 table-responsive mb-5">
+                <table class="table text-center">
+                    <thead class="bg-light text-dark">
+                        <tr>
+                            <th>Products</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Subtotal</th>
+                            <th>Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody class="align-middle">
+                        {% for item in cart_items %}
+                        <tr>
+                            <td class="align-middle d-flex">
+                                <div>
+                                    <img src="{{ item.variant.book_id.cover_image.url }}" alt="{{item.variant.book_id}}" style="width: 50px;">
+                                </div>
+                                <div class="cart-product-details ms-5">
+                                    <span class="main-span mt-1"><a class="main-span mt-1" href="{% url 'product_details' item.variant.book_id.id item.variant.id %}"> {{ item.variant.book_id }}</a></span>
+                                    <span class="styled-span">Format: {{ item.variant.cover_type }}</span>
+                                    <span class="styled-span">Language: {{ item.variant.language_variant }}</span>
+                                </div>
+                            </td>
+                            <td class="align-middle">₹{{ item.variant.price }}</td>
+
+                            <td class="align-middle">
+                                <div class="d-flex align-items-center">
+                                    <button class="btn btn-sm {% if item.quantity <= 1 %}btn-light disabled{% else %}{% endif %} cart-btn" id="decreaseBtn{{ item.id }}" onclick="decreaseQuantity('{{ item.id }}');" style="background-color: #59ab6e; font-weight: bold; color: white; width: 30px; height: 30px; padding: 0; font-size: 14px;" >-</button>
+                                    <input type="number" class="form-control form-control-sm quantity-input" id="qty{{ item.id }}" step="1" min="1" max="300" name="quantity" value="{{ item.quantity }}" onchange="updateQuantity('{{ item.id }}', this.value);" style="width: 60px; text-align: center; height: 30px; background-color: #0B1C39; color: white;" disabled>
+                                    <button class="btn btn-sm {% if item.quantity >= item.variant.stock %}btn-light disabled{% else %}{% endif %} cart-btn" id="increaseBtn{{ item.id }}" onclick="increaseQuantity('{{ item.id }}','{{ item.variant.stock }}');" style="background-color: #59ab6e; font-weight: bold; color: white; width: 30px; height: 30px; padding: 0; font-size: 14px;">+</button>
+                                </div>
+                            </td>
+                            <td class="align-middle">₹{{ item.subtotal}} </td>
+                            <td class="align-middle"> <a href="{% url 'remove_cart_item' item.id %}" class="btn btn-sm btn-success"><i class="fa fa-times"></i></a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <nav class="d-flex justify-content-center mt-4">
+                    <ul class="pagination">
+                        {% if cart_items.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ cart_items.previous_page_number }}">Previous</a>
+                        </li>
+                        {% endif %}
+                        {% for i in cart_items.paginator.page_range %}
+                        <li class="page-item {% if cart_items.number == i %}active{% endif %}">
+                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                        </li>
+                        {% endfor %}
+                        {% if cart_items.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ cart_items.next_page_number }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ cart_items.paginator.num_pages }}">Last</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-4">
+                <form method="POST" action="{% url 'apply_coupon' %}">
+                    {% csrf_token %}
+                    <div class="btn-group mb-3">
+                        <div class="btn-group">
+                            <select name="coupon_id" class="form-control" style="width: 100%; height:50px;">
+                                <option value="">Select Coupon</option>
+                                {% for coupon in valid_coupons %}
+                                <option value="{{ coupon.id }}" {% if applied_coupon and coupon.id == applied_coupon.id %}selected{% endif %}>
+                                    {{ coupon.code }} ({{ coupon.discount }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-success">Apply Coupon</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Applied Coupon -->
+                {% if applied_coupon and applied_coupon.id %}
+                                   <div class="col-sm-9 btn-group">
+                        <h6>Applied Coupon: {{ applied_coupon.code }}</h6>
+                    </div>
+                    <form method="POST" action="{% url 'remove_coupon' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="coupon_id" value="{{ applied_coupon.id }}" style="height:10px;">
+                        <button type="submit" class="btn btn-success">Remove Coupon</button>
+                    </form>
+
+                {% endif %}
+                <div class="card border mb-5">
+                    <div class="card-header bg-light border-0">
+                        <h4 class="font-weight-semi-bold m-0">Cart Summary</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-3 pt-1">
+                            <h6 class="font-weight-medium">Subtotal</h6>
+                            <h6 class="font-weight-medium">₹{{ subtotal }}</h6>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-medium">Discount</h6>
+                            <h6 class="font-weight-medium">₹{{ discount_amount }}</h6>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <div class="d-flex justify-content-between mt-2">
+                            <h5 class="font-weight-bold">Total</h5>
+                            <h5 class="font-weight-bold">₹{{ total_price }}</h5>
+                        </div>
+                        <a href="{% url 'checkout' %}" class="btn btn-block btn-success my-3 py-3">Proceed To Checkout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Cart End -->
+
+
+{% endif %}
+
+{% endblock content %}
+        {% block script %}
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+    function increaseQuantity(item_id, stock) {
+        var quantityInput = $('#qty' + item_id);
+        var quantity = parseInt(quantityInput.val());
+        if (quantity < stock) {
+            quantity += 1;
+            updateQuantity(item_id, quantity);
+        }
+    }
+
+    function decreaseQuantity(item_id) {
+        var quantityInput = $('#qty' + item_id);
+        var quantity = parseInt(quantityInput.val());
+        if (quantity > 1) {
+            quantity -= 1;
+            updateQuantity(item_id, quantity);
+        }
+    }
+
+    function updateQuantity(item_id, quantity) {
+        var url = "{% url 'update_quantity' %}";
+        var csrfToken = "{{ csrf_token }}";
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: {
+                item_id: item_id,
+                quantity: quantity,
+                csrfmiddlewaretoken: csrfToken
+            },
+            success: function(response) {
+                window.location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+</script>
+        {% endblock %}

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trial</title>
+</head>
+<body>
+{% for items in cart_items %}
+<h1>{{ items.variant.book_id.id}} </h1>
+<h1>{{items.variant.cover_type}}</h1>
+<h1>{{items.variant.language_variant}}</h1>
+<h1>{{items.variant.price}}</h1>
+{% endfor%}
+<h2>{{user.username}}</h2>
+</body>
+</html>

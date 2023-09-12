@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="apple-touch-icon" href="assets/img/apple-icon.png">
+    {% block style %} {% endblock %}
+    <style> .footer {
+            background-color: #e9eef5; /* Set the background color */
+            padding: 1rem; /* Add padding for spacing */
+            text-align: center;
+            color: black; /* Set the text color */
+        }
+           body {
+            display: grid;
+             grid-template-rows: auto 1fr auto;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+        #bodydiv {
+        flex: 1;
+        }
+    </style>
+    <link rel="stylesheet" href="{% static 'css/templatemo.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>{% block title %}base{% endblock %}</title>
+</head>
+<body>
+<header>
+<nav class="navbar navbar-expand-sm navbar-light bg-light">
+    <a class="navbar-brand" href="#"><img src="{% static 'images/logop.png' %}" alt="Girl in a jacket"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item ">
+                <a class="nav-link {% block homeclass %}{% endblock %}" href="{% url 'home' %}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% block shopclass %}{% endblock %}" href="{% url 'shop' 0 %}" >Shop</a>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle {% block accountclass %}{% endblock %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-user" aria-hidden="true"></i>{% if user.is_authenticated %} {{user.username}}{% endif %}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                    {% if user.is_authenticated %}
+                    <a class="dropdown-item" href="{% url 'signout' %}">Sign out</a>
+                    <a class="dropdown-item" href="{% url 'view_cart' %}">My Cart</a>
+                    <a class="dropdown-item" href="{% url 'wishlist_summary' %}">My Wishlist</a>
+                    <a class="dropdown-item" href="{% url 'my_orders' %}">My Orders</a>
+                    <a class="dropdown-item" href="{% url 'my_wallet' %}">My Wallet</a>
+                    <a class="dropdown-item" href="{% url 'user_profile' %}">My Profile</a>
+
+                    {% else %}
+                    <a class="dropdown-item" href="{% url 'signin' %}">Login</a>
+                    <a class="dropdown-item" href="{% url 'signup' %}">Sign up</a>
+                     {% endif %}
+                </div>
+            </li>
+
+
+        </ul>
+
+        <ul class="navbar-nav mx-2 d-flex justify-content-end">
+            <li class="nav-item ">
+                <a class = "nav-link" href="{% url 'view_cart' %}"><i class="fa-solid fa-cart-shopping"></i> Cart</a>
+            </li>
+
+        </ul>
+
+    </div>
+</nav>
+</header>
+<div id="bodydiv">
+
+{% block content %}
+{% endblock %}
+</div>
+<!-- Start Footer -->
+
+<footer class="bg-light text-center text-white">
+    <!-- Grid container -->
+    <div class="container p-4 pb-0">
+        <!-- Section: Social media -->
+        <div>
+
+        </div>
+
+        <section class="mb-4">
+            <!-- Facebook -->
+            <a
+                    class="btn text-white btn-floating m-1"
+                    style="background-color: #3b5998;"
+                    href="#!"
+                    role="button"
+            ><i class="fab fa-facebook-f"></i
+            ></a>
+
+            <!-- Twitter -->
+            <a
+                    class="btn text-white btn-floating m-1"
+                    style="background-color: #55acee;"
+                    href="#!"
+                    role="button"
+            ><i class="fab fa-twitter"></i
+            ></a>
+
+            <!-- Google -->
+            <a
+                    class="btn text-white btn-floating m-1"
+                    style="background-color: #dd4b39;"
+                    href="#!"
+                    role="button"
+            ><i class="fab fa-google"></i
+            ></a>
+
+            <!-- Instagram -->
+            <a
+                    class="btn text-white btn-floating m-1"
+                    style="background-color: #ac2bac;"
+                    href="#!"
+                    role="button"
+            ><i class="fab fa-instagram"></i
+            ></a>
+
+            <!-- Linkedin -->
+            <a
+                    class="btn text-white btn-floating m-1"
+                    style="background-color: #0082ca;"
+                    href="#!"
+                    role="button"
+            ><i class="fab fa-linkedin-in"></i
+            ></a>
+            <!-- Github -->
+            <a
+                    class="btn text-white btn-floating m-1"
+                    style="background-color: #333333;"
+                    href="#!"
+                    role="button"
+            ><i class="fab fa-github"></i
+            ></a>
+        </section>
+        <!-- Section: Social media -->
+    </div>
+    <!-- Grid container -->
+
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2023 Copyright:
+        <a class="text-white" href="https://mdbootstrap.com/">Kithab.com</a>
+    </div>
+    <!-- Copyright -->
+</footer>
+
+
+<!-- End Footer -->
+{% block script %}
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+{% endblock %}
+</body>
+
+</html>

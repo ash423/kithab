@@ -1,0 +1,40 @@
+{% extends 'admin_side\ttt.html' %}
+
+{% block content %}
+<body class="bg-light">
+<form action="/addproduct/" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label class="form-label" for="atitle">Enter Name</label>
+        <input type="text" id="atitle" name="atitle" class="form-control form-control-lg" placeholder="Enter Title" required>
+    </div>
+    <label class="form-label" for="cat">Select Category</label>
+    <select name="cat" id="cat" required>
+        {% for category in categories %}
+        <option value="{{category.id}}">{{category.name}}</option>
+        {% endfor %}
+
+    </select>
+    <div class="mb-3">
+        <label class="form-label" for="author">Enter Author</label>
+        <input type="text" id="author" name="author" class="form-control form-control-lg" placeholder="Enter Title" required>
+    </div>
+    <label class="form-label" for="num">Number of pages</label>
+    <input type="number" name="num" id="num" required>
+    <div class="mb-3">
+        <label class="form-label" for="publisher">Enter Publisher</label>
+        <input type="text" id="publisher" name="publisher" class="form-control form-control-lg" placeholder="Enter Publisher" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="img">Choose Image</label>
+        <input type="file" name="img" id="img" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="desc">Add Description</label>
+        <textarea name="desc" id="desc" class="form-control" placeholder="Enter text here" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary btn-block btn-lg gradient-custom-4 text-body">Done</button>
+
+</form>
+</body>
+{% endblock %}

@@ -1,0 +1,260 @@
+{% extends 'book_store\base.html' %}
+{%block title%} Product Details {% endblock %}
+{% block shopclass %}active{% endblock %}
+{% block content %}
+
+
+
+
+<html lang="en">
+
+<head>
+    <title>Product Detail Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="assets/img/apple-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/templatemo.css">
+    <link rel="stylesheet" href="assets/css/custom.css">
+
+    <!-- Load fonts style after rendering the layout styles -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="assets/css/fontawesome.min.css">
+
+    <!-- Slick -->
+    <link rel="stylesheet" type="text/css" href="assets/css/slick.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/slick-theme.css">
+    <!--
+
+    TemplateMo 559 Zay Shop
+
+    https://templatemo.com/tm-559-zay-shop
+
+    -->
+</head>
+
+<body>
+
+<!-- Close Header -->
+
+<!-- Modal -->
+<div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="w-100 pt-1 mb-5 text-right">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="" method="get" class="modal-content modal-body border-0 p-0">
+            <div class="input-group mb-2">
+                <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Search ...">
+                <button type="submit" class="input-group-text bg-success text-light">
+                    <i class="fa fa-fw fa-search text-white"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<!-- Open Content -->
+<section class="bg-light">
+    <div class="container pb-5">
+        <div class="row">
+            <div class="col-lg-5 mt-5">
+                <div class="card mb-3 img-gallery">
+                    <img class="card-img img-fluid img-zoom-container" src="{{ book.cover_image.url }}" alt="Card image cap" id="myimage">
+
+                </div>
+
+
+                <div class="row">
+
+                    <!--Start Controls-->
+
+                </div>
+            </div>
+
+            <!-- col end -->
+            <div class="col-lg-7 mt-5">
+                <div class="card"  style="position: relative;">
+
+                    <div class="card-body">
+                        <div id="myresult" class="img-zoom-result"></div>
+                        <h1 class="h2">{{book.title}}</h1>
+                        <p class="h3 py-2">Rs. {{price}}</p>
+                        <p class="py-2">
+                            <i class="fa fa-star text-warning"></i>
+                            <i class="fa fa-star text-warning"></i>
+                            <i class="fa fa-star text-warning"></i>
+                            <i class="fa fa-star text-warning"></i>
+                            <i class="fa fa-star text-secondary"></i>
+                            <span class="list-inline-item text-dark">Rating 4.8 | 36 Comments</span>
+                        </p>
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <h6>Author:</h6>
+                            </li>
+                            <li class="list-inline-item">
+                                <p class="text-muted"><strong>{{book.author}}</strong></p>
+                            </li>
+                        </ul>
+
+                        <h6>Description:</h6>
+                        <p>{{ book.description }}</p>
+                        {% if Instock > 0 %}
+                        <p class="text-success">In Stock</p>
+                        {% else %}
+                        <p class="text-danger">Out of Stock</p>
+                        {% endif %}
+
+
+                        <label class="form-label" for="languageSelect">Select Language</label>
+
+                        <select class="form-select form-select-sm mb-3" aria-label=".form-select-sm example" name="language" id="languageSelect">
+
+                            {% for variants in language_variants %}
+
+                            <option value="{% url 'product_details' book.id variants.id %}" {% if variants.id == variant.id %}selected{% endif %}>{{ variants.language_variant }}</option>
+
+                            {% endfor %}
+                        </select>
+
+                        <label class="form-label" for="coverSelect">Select CoverType</label>
+                        <select name="cat" id="coverSelect">
+
+                            {% for cover in cover_type_variants %}
+
+                            <option value="{% url 'product_details' book.id cover.id %}" {% if cover.id == variant.id %}selected{% endif %} >{{cover.cover_type}}</option>
+                            {% endfor %}
+
+                        </select>
+
+
+
+
+
+
+                        <div class="row1 d-flex justify-content-right mt-4">
+                            {% if Instock > 0 %}
+                            <a href="{% url 'add_to_cart' variant.id %}" ><button class="btn btn-success py-3 px-5" id="showSweetAlert"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button></a>
+
+                            {% endif %}
+
+                           {% if user.is_authenticated %}
+                            <a href="{% url 'add_to_wishlist' variant.id %}"> <button class="btn btn-outline-dark py-3 px-5 ms-3"><i class="fa fa-heart me-2"></i>Wishlist</button></a>
+                            {% endif %}
+                        </div>
+                            </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Close Content -->
+
+
+<!-- End Article -->
+
+
+
+<!-- Start Script -->
+<script src="assets/js/jquery-1.11.0.min.js"></script>
+<script src="assets/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/templatemo.js"></script>
+<script src="assets/js/custom.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function() {
+        // Language select change event
+        $('#languageSelect').change(function() {
+            var selectedOption = $(this).val();
+            if (selectedOption) {
+                window.location.href = selectedOption;
+            }
+        });
+
+        // Cover select change event
+        $('#coverSelect').change(function() {
+            var selectedOption = $(this).val();
+            if (selectedOption) {
+                window.location.href = selectedOption;
+            }
+        });
+    });
+</script>
+
+<script>
+// Initiate zoom effect:
+imageZoom("myimage", "myresult");
+</script>
+
+</script>
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const variantInputs = document.querySelectorAll('.variant-input');
+            const variantBoxes = document.querySelectorAll('.variant-box');
+
+            variantInputs.forEach(function(input, index) {
+                input.addEventListener('change', function() {
+                    variantBoxes.forEach(function(box) {
+                        box.classList.remove('selected');
+                    });
+
+                    if (input.checked) {
+                        variantBoxes[index].classList.add('selected');
+                    }
+                });
+            });
+        });
+    </script>
+<!-- End Script -->
+
+<!-- Start Slider Script -->
+<script src="assets/js/slick.min.js"></script>
+<script>
+        $('#carousel-related-product').slick({
+            infinite: true,
+            arrows: false,
+            slidesToShow: 4,
+            slidesToScroll: 3,
+            dots: true,
+            responsive: [{
+                    breakpoint: 1024,
+                    settings: {
+                        slidesToShow: 3,
+                        slidesToScroll: 3
+                    }
+                },
+                {
+                    breakpoint: 600,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 3
+                    }
+                },
+                {
+                    breakpoint: 480,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 3
+                    }
+                }
+            ]
+        });
+    </script>
+<!-- End Slider Script -->
+
+</body>
+
+</html>
+{% endblock %}

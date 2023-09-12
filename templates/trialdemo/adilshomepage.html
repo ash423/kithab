@@ -1,0 +1,228 @@
+{% extends "book_store/base.html" %}
+{% load static %}
+{% block style %}
+{% load static %}
+<style>
+  .custom-sidebar {
+            display: flex;
+        }
+
+        .custom-sidebar .sidebar {
+            width: 300px;
+            padding-right: 15px;
+        }
+
+        .custom-sidebar .content {
+            flex: 1;
+            padding-left: 15px;
+        }
+</style>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+{% endblock %}
+
+{% block body %}
+{% load static %}
+<style>
+   .card-img-top {
+  transition: transform 0.3s ease;
+}
+
+.zoom-card:hover .card-img-top {
+  transform: scale(1.04);
+  /* You can adjust the scale factor (1.05 in this case) to control the amount of zoom */
+}
+
+/* Add some styling to the discount badge */
+.discount-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 6px;
+  background-color: red;
+  color: white;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 1;
+
+}
+.bi-star-fill {
+    color: rgb(249, 163, 14);
+}
+
+</style>
+
+<div>
+    <!-- Banner -->
+    <div class="banner">
+        {% if cat %}
+        <img src="{{cat.bannerimage.url}}" alt="Banner Image">
+        {% else %}
+        <img src="{% static 'img/p2.webp' %}" alt="Banner Image">
+        {% endif %}
+    </div>
+    <br>
+
+    <!-- Filter Dropdowns -->
+    <div class="container filter-dropdown">
+
+        <div class="row">
+            <hr>
+            <div class="col-md-4">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="priceCategoryDropdown"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Price
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="priceCategoryDropdown">
+                        <a class="dropdown-item" href="{% url 'cat' 'all' %}?price_range=100-500">100-500</a>
+                        <a class="dropdown-item" href="{% url 'cat' 'all' %}?price_range=501-1000">501-1000</a>
+                        <a class="dropdown-item" href="{% url 'cat' 'all' %}?price_range=1001-1500">1001-1500</a>
+                        <a class="dropdown-item" href="{% url 'cat' 'all' %}?price_range=1501-2000">1501-2000</a>
+                        <a class="dropdown-item" href="{% url 'cat' 'all' %}?price_range=2001-2005">2001-2005</a>
+                        {% if cat %}
+                        <a class="dropdown-item" href="{% url 'cat' cat.slug %}?price_range=100-500">100-500</a>
+                        <a class="dropdown-item" href="{% url 'cat' cat.slug %}?price_range=501-1000">501-1000</a>
+                        <a class="dropdown-item" href="{% url 'cat' cat.slug %}?price_range=1001-1500">1001-1500</a>
+                        <a class="dropdown-item" href="{% url 'cat' cat.slug %}?price_range=1501-2000">1501-2000</a>
+                        <a class="dropdown-item" href="{% url 'cat' cat.slug %}?price_range=2001-2005">2001-2005</a>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="productCategoryDropdown"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Category
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="productCategoryDropdown">
+                        <a class="dropdown-item" href="{% url 'cat' 'all' %}">All Plants</a>
+                        <a class="dropdown-item" href="{% url 'cat' 'indoor-plants' %}">Indoor</a>
+                        <a class="dropdown-item" href="{% url 'cat' 'air-purifying' %}">Air-Purifying</a>
+                        <a class="dropdown-item" href="{% url 'cat' 'low-light' %}">Low-Light</a>
+                        <a class="dropdown-item" href="{% url 'cat' 'succulents' %}">Succulent</a>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="sortByDropdown"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Sort By
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="sortByDropdown">
+
+                        <a class="dropdown-item" href="?sort=az">Alphabetically A-Z</a>
+                        <a class="dropdown-item" href="?sort=za">Alphabetically Z-A</a>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="container cont ">
+    <div class="row">
+        {% for product in products %}
+        {% with variant=product.productvariant_set.all|random %}
+        {% with discount_tuple=variant.get_discounted_price %}
+        <div class="col-md-3 mb-4">
+            <div class="card zoom-card">
+                {% if discount_tuple.1 %}
+                <div class="discount-badge">
+                    <span>{{ discount_tuple.1 }}% OFF</span>
+                </div>
+                {% endif %}
+                <img src="{{ variant.images.first.image.url }}" class="card-img-top" alt="Product Image">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+
+                    <div class="rating">
+                        <div class="rating-stars ">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <span class="rating-value">4.5</span>
+                    </div>
+
+                    <div class="price" style="display: flex; justify-content: flex-start;">
+                        <p class="card-text inline-price">
+                            <s>{{ variant.store_price }}</s>
+                        </p>
+
+
+                        <p class="card-text inline-price" style="margin-left: 10px;"><strong>{{ variant.sale_price }}</strong></p>
+                    </div>
+                    <a href="{% url 'product_detail' slug=variant.slug %}" class="btn btn-success">View Product</a>
+
+                </div>
+            </div>
+        </div>
+        {% endwith %}
+        {% endwith %}
+        {% endfor %}
+    </div>
+</div>
+
+
+<nav aria-label="...">
+    <ul class="pagination justify-content-end me-5">
+        {% if products.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ products.previous_page_number }}">Previous</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link">Previous</a>
+        </li>
+        {% endif %}
+
+        {% for page in products.paginator.page_range %}
+        {% if products.number == page %}
+        <li class="page-item active" aria-current="page">
+            <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+        </li>
+        {% else %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+
+        {% if products.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ products.next_page_number }}">Next</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link">Next</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+
+
+
+
+
+{%endblock%}
+
+
+
+{% block script %}
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+{% endblock %}
+
+

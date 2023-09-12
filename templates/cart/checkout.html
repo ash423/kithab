@@ -1,0 +1,299 @@
+{% extends "book_store/base.html" %}
+{%block title%} Checkout {% endblock %}
+{% load static %}
+
+{% block style %}
+  <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <link href="{% static 'store/css/stylee.css' %}" rel="stylesheet">
+
+<style>
+    /* Your CSS styles here */
+    .addressList-base-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .addressBlocks-base-block {
+      display: flex;
+      align-items: flex-start;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .addressDetails-base-desktopAddressTitle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .addressDetails-base-name {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .addressDetails-base-addressType {
+      background-color: #007bff;
+      color: #fff;
+      padding: 2px 5px;
+      border-radius: 3px;
+    }
+
+    .addressDetails-base-addressField {
+      margin-top: 5px;
+    }
+
+    .addressDetails-base-mobile span {
+      margin-right: 5px;
+    }
+
+    .addressBlocks-base-btns button {
+      margin-right: 5px;
+      cursor: pointer;
+    }
+
+    .addressList-base-addBlock {
+      border: 1px dashed #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+{% endblock %}
+{% block content %}
+
+<!-- Checkout Start -->
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5">
+            <div class="col-lg-8">
+                <div class="addressDesktop-base-left">
+                    <div>
+                      <div class="addressList-base-titleContainer">
+                        <div class="addressList-base-title">Select Delivery Address</div>
+
+                      </div>
+
+                        {% for address in addresses %}
+
+                      <div class="addressBlocks-base-block addressBlocks-base-serviceable" id="222948670" data-action="select">
+                        <div class="addressBlocks-base-innerBlock">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="addressBlocks-base-radioIcon">
+                            <!-- Your SVG icon here -->
+                          </svg>
+
+                          <div>
+                            <div>
+                              <div class="addressDetails-base-desktopAddressTitle">
+                                <div class="addressDetails-base-name">{{address.name}}</div>
+                                  {% if address.is_default == True %}
+                                <div class="addressDetails-base-addressType">HOME</div>
+                                  {% endif %}
+                              </div>
+                              <div class="addressDetails-base-addressField addressBlocks-base-addressDetail">{{address.address}}</div>
+                              <span>{{address.district}},{{address.state}} </span><span>{{address.pincode}}</span>
+                            </div>
+                            <div class="addressDetails-base-mobile">
+                              <span>Mobile: </span><span>{{address.mobile}}</span>
+                            </div>
+                              <input type="radio" id="{{address.id}}" name="selectaddress" value="{{address.id}}">
+                          </div>
+
+                        </div>
+                      </div>
+                        {% endfor %}
+                        <div class="fixed-box" data-action="add">
+                            <a href="{% url 'addaddress_checkout' %}" class="border-box  addressList-base-addBlock rounded p-3 d-flex justify-content-center align-items-center">
+                                <div class="">Add Address</div>
+                            </a>
+                        </div>
+
+
+
+                    </div>
+
+          </div>
+
+            </div>
+            <div class="col-lg-4">
+                <div class="card mb-5">
+                    <div class="card-header bg-light border-0">
+                        <h4 class="font-weight-semi-bold m-0">Order Total</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="font-weight-medium mb-3">Products</h5>
+                        {% for item in cart_items %}
+                        <div class="d-flex justify-content-between">
+                            <p>{{ item.variant.book_id.title }}</p>
+
+                        </div>
+                        {% endfor %}
+
+                        <hr class="mt-0">
+                        <div class="d-flex justify-content-between mb-3 pt-1">
+                            <h6 class="font-weight-medium">Subtotal</h6>
+                            <h6 class="font-weight-medium">₹{{ subtotal }}</h6>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-medium">Discount</h6>
+                            <h6 class="font-weight-medium">₹{{ discount_amount }}</h6>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <div class="d-flex justify-content-between mt-2">
+                            <h5 class="font-weight-bold">Total</h5>
+                            <h5 class="font-weight-bold">₹{{ total_price }}</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="card  mb-5">
+                    <div class="card-header bg-light border-0">
+                        <h4 class="font-weight-semi-bold m-0">Payment</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" name="paymentOption" id="upi" value="upi" checked>
+                                <label for="upi">UPI</label><br>
+                                <input type="radio" name="paymentOption" id="cod" value="cod">
+                                <label for="cod">Cash on Delivery</label><br>
+                                {% if wallet_amount >= total_price %}
+                                <input type="radio" name="paymentOption" id="puw" value="puw">
+                                <label for="cod">Pay Using Wallet</label>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <button class="btn btn-lg btn-block btn-success font-weight-bold my-3 py-3" id="proceedBtn">Place Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Checkout End -->
+
+{% endblock  %}
+{% block script %}
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+
+ document.getElementById("proceedBtn").addEventListener("click", function (e) {
+    e.preventDefault();
+
+    // Debugging: Check if the event listener is triggered
+    console.log("Button clicked");
+
+    var selectedAddress = document.querySelector('input[name="selectaddress"]:checked');
+
+
+    if (selectedAddress === null) {
+        // Prevent the form submission
+        console.log("No address selected");
+        alert("Please select an address before proceeding.");
+    } else {
+        var paymentOption = document.querySelector('input[name="paymentOption"]:checked').value;
+         console.log("Selected address value:", selectedAddress.value);
+         var addressId = parseInt(selectedAddress.value, 10); // This addressId is to be accessed at the url of handler function
+
+
+         console.log("Payment option selected:", paymentOption);
+
+        if (paymentOption === "cod") {
+            window.location.href = placeOrderURL;
+        } else if (paymentOption === "upi") {
+            console.log(addressId)
+            initiateRazorpayPayment(addressId);
+            console.log("Payment su")
+        } else if (paymentOption === "puw"){
+            window.location.href = placeOrderURLWallet;
+        }
+    }
+});
+
+
+
+    // Assign Django variables to JavaScript variables
+    var csrfToken = "{{ csrf_token }}";
+    var staticURL = "{% static 'images/logop.png' %}";
+    var selectedAddressId = addressId;
+    var placeOrderURL = "{% url 'order_placed'  0 %}".replace('0', addressId);
+    var placeOrderURLWallet = "{% url 'pay_using_wallet'  0 %}".replace('0', addressId);
+
+    function initiateRazorpayPayment(addressIda) {
+        $.ajax({
+            type: "POST",
+
+            url: "/cart/initiate_payment",
+            headers: { "X-CSRFToken": csrfToken },
+            dataType: 'json',
+            success: function(response) {
+            console.log(response)
+                var options = {
+                    "key": response.key,
+                    "amount": response.amount,
+                    "currency": response.currency,
+                    "name": "kithab",
+                    "description": "Thank you for purchasing from us",
+                    "image": staticURL,
+                    "order_id": response.order_id,
+
+                    "handler": function(response) {
+                        var paymentId = response.razorpay_payment_id;
+                        var orderId = response.razorpay_order_id;
+                        var signature = response.razorpay_signature;
+                        $.ajax({
+                            type: "POST",
+                            url: "/cart/online_payment_order/" + addressIda + "/", //Here i need to access the earlier mentioned addressId
+
+
+                            headers: { "X-CSRFToken": csrfToken },
+                            data: {
+                                payment_id: paymentId,
+                                orderId: orderId,
+                                signature: signature
+                            },
+                            success: function(response) {
+                                window.location.href = "{% url 'orderplaced' %}";
+                            },
+                            error: function(xhr, status, error) {
+                                alert("Error placing the order. Please try again.");
+                            }
+                        });
+                    },
+                    //...Rest of your options...
+                };
+                var rzp1 = new Razorpay(options);
+                rzp1.on('payment.failed', function(response) {
+                    console.log("ello")
+                });
+                rzp1.open();
+            },
+            error: function(xhr, status, error) {
+                alert("Error initiating payment. Please try again.");
+            }
+        });
+    };
+
+
+
+
+</script>
+{% endblock %}
+<!-- Add this script block in your template after the content -->
