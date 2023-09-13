@@ -211,16 +211,20 @@
         var paymentOption = document.querySelector('input[name="paymentOption"]:checked').value;
          console.log("Selected address value:", selectedAddress.value);
          var addressId = parseInt(selectedAddress.value, 10); // This addressId is to be accessed at the url of handler function
-
+         var placeOrderURL = "{% url 'order_placed'  0 %}".replace('0', addressId);
 
          console.log("Payment option selected:", paymentOption);
 
         if (paymentOption === "cod") {
-            window.location.href = placeOrderURL;
+             console.log('entered')
+             console.log(addressId)
+             console.log(placeOrderURL)
+             window.location.href = placeOrderURL
+
         } else if (paymentOption === "upi") {
             console.log(addressId)
             initiateRazorpayPayment(addressId);
-            console.log("Payment su")
+
         } else if (paymentOption === "puw"){
             window.location.href = placeOrderURLWallet;
         }
@@ -232,6 +236,7 @@
     // Assign Django variables to JavaScript variables
     var csrfToken = "{{ csrf_token }}";
     var staticURL = "{% static 'images/logop.png' %}";
+    console.log("asdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa "+addressId )
     var selectedAddressId = addressId;
     var placeOrderURL = "{% url 'order_placed'  0 %}".replace('0', addressId);
     var placeOrderURLWallet = "{% url 'pay_using_wallet'  0 %}".replace('0', addressId);

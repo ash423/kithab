@@ -367,36 +367,29 @@ def checkout(request):
 
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def order_placed(request,addressid):
-    if request.method == 'POST':
-        payment_id = request.POST.getlist('payment_id')[0]
-        orderId = request.POST.getlist('orderId')[0]
-        signature = request.POST.getlist('signature')[0]
-        user_address = get_object_or_404(Address, id=addressid, user=request.user)
-        cart = Cart.objects.get(user=request.user)
-        cart_items = cart.cartitem_set.all()
-        if cart_items:
-            subtotal = cart_items.aggregate(subtotal=Sum(F('quantity') * F('variant__price')))['subtotal'] or Decimal('0.00')
+    print("Order Placed")
+    user_address = get_object_or_404(Address, id=addressid, user=request.user)
+    cart = Cart.objects.get(user=request.user)
+    cart_items = cart.cartitem_set.all()
+    if cart_items:
+        subtotal = cart_items.aggregate(subtotal=Sum(F('quantity') * F('variant__price')))['subtotal'] or Decimal('0.00')
+        applied_coupon_id = request.session.get('applied_coupon', {}).get('id')
+        discount_amount = Decimal('0.00')
+        coupon = None
 
-            applied_coupon_id = request.session.get('applied_coupon', {}).get('id')
-
-            discount_amount = Decimal('0.00')
-            coupon = None
-
-            # If an applied_coupon_id exists, attempt to retrieve the coupon
-            if applied_coupon_id is not None:
-                try:
-                    coupon = get_object_or_404(Coupon, id=applied_coupon_id)
-                    discount_amount = Decimal(coupon.discount)
-                except Coupon.DoesNotExist:
-                    # Handle the case when the coupon with the stored ID no longer exists
-                    coupon = None
+        if applied_coupon_id is not None:
+            try:
+                coupon = get_object_or_404(Coupon, id=applied_coupon_id)
+                discount_amount = Decimal(coupon.discount)
+            except Coupon.DoesNotExist:
+                coupon = None
 
             # Calculate the total price based on the discount amount
-            total_price = subtotal  - discount_amount
+        total_price = subtotal  - discount_amount
 
 
 
-            order = Order.objects.create(
+        order = Order.objects.create(
                 user=request.user,
                 address=user_address,
                 payment_status='Cash on Delivery',
@@ -409,24 +402,24 @@ def order_placed(request,addressid):
 
             )
 
-            for cart_item in cart_items:
-                OrderItem.objects.create(
+        for cart_item in cart_items:
+            OrderItem.objects.create(
                     order=order,
                     variant=cart_item.variant,
                     quantity=cart_item.quantity,
                     price=cart_item.price
 
                 )
-                variant = cart_item.variant
-                variant.stock -= cart_item.quantity
-                variant.save()
-            if coupon:
-                if coupon.quantity >= 1:
-                    coupon.quantity -= 1
-                    coupon.save()
-            cart_items.delete()
-            orderId = order.id
-            request.session.pop('applied_coupon', None)
+            variant = cart_item.variant
+            variant.stock -= cart_item.quantity
+            variant.save()
+        if coupon:
+            if coupon.quantity >= 1:
+                coupon.quantity -= 1
+                coupon.save()
+        cart_items.delete()
+        orderId = order.id
+        request.session.pop('applied_coupon', None)
     return render(request, 'cart/order_placed.html')
 
 
