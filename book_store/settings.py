@@ -165,3 +165,10 @@ CORS_ALLOWED_ORIGINS = [
     "http://13.53.168.41",
     "http://0.0.0.0:9090"
 ]
+# CSRF settings
+CSRF_TRUSTED_ORIGINS = [
+    "http://13.53.168.41",
+    "http://0.0.0.0:9090",
+
+    # Add more trusted origins here
+]
