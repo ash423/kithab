@@ -82,6 +82,13 @@ def add_to_cart(request, variant_id):
 
 
     variant = Variant.objects.get(id=variant_id)
+    print(variant.book_id.category.offer_active)
+    if variant.book_id.category.offer_active:
+        offer = variant.book_id.category.offer
+        offer_pricea = (1-(offer/100))*variant.price
+        variant.offer_price = offer_pricea
+        variant.save()
+        print(offer_pricea)
     user = request.user
     if user.is_authenticated:
         cart, _ = Cart.objects.get_or_create(user=user)
@@ -94,6 +101,8 @@ def add_to_cart(request, variant_id):
 
     cart_item = cart.cartitem_set.filter(variant=variant).first()    #edited from get or create
 
+
+
     if cart_item:
         available_stock = variant.stock - cart_item.quantity
         requested_quantity = 1
@@ -105,7 +114,10 @@ def add_to_cart(request, variant_id):
             messages.error(request,'Request quantity exceeds available stock')
     else:
         if 1 <= variant.stock:
-            CartItem.objects.create(cart=cart,variant=variant,quantity=1,price=variant.price)
+            if variant.book_id.category.offer_active:
+                CartItem.objects.create(cart=cart,variant=variant,quantity=1,price=variant.offer_price)
+            else:
+                CartItem.objects.create(cart=cart,variant=variant,quantity=1,price=variant.price)
             messages.success(request,'Item added to cart')
         else:
             messages.error(request,'Requested quantity exceeds available stock')
@@ -152,7 +164,6 @@ def update_quantity(request):
         item_id = request.POST.get('item_id')
         quantity = int(request.POST.get('quantity'))
 
-
         cart_item = CartItem.objects.get(id=item_id)
         variant = cart_item.variant
         available_stock = variant.stock - cart_item.quantity
@@ -172,7 +183,11 @@ def update_quantity(request):
             # Check if the cart's subtotal meets the minimum requirement for the applied coupon (if any)
             cart = Cart.objects.get_or_create(user_id=request.user)[0] if request.user.is_authenticated else None
             if cart:
+
                 cart_items = cart.cartitem_set.annotate(subtotal=F('quantity') * F('variant__price'))
+                if variant.book_id.category.offer_active:
+                    cart_items = cart.cartitem_set.annotate(subtotal=F('quantity') * F('variant__offer_price'))
+
                 subtotal = cart_items.aggregate(subtotal_price=Sum('subtotal'))['subtotal_price'] or 0
 
                 applied_coupon = request.session.get('applied_coupon', None)

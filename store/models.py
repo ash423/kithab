@@ -1,3 +1,4 @@
+from django.core.validators import MaxValueValidator
 from django.db import models
 from django.utils.text import slugify
 
@@ -8,12 +9,19 @@ class Category(models.Model):
     image = models.ImageField(upload_to='category_images/')
     is_active = models.BooleanField(default=True)
     description = models.TextField(null=True)
+    offer_active = models.BooleanField(default=False)
+    offer = models.PositiveSmallIntegerField(default=0,null=True,validators=[MaxValueValidator(limit_value=90)])
+
+
     def save(self, *args, **kwargs):
+
         # Generate slug from the name field
         self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+
     def __str__(self):
         return self.name
+
 
 class Book(models.Model):
 
@@ -32,8 +40,11 @@ class Book(models.Model):
     def __str__(self):
         return self.title
 
+
 class Language(models.Model):
+
     languages = models.CharField(max_length=255)
+
     def __str__(self):
         return self.languages
 
@@ -52,6 +63,7 @@ class Variant(models.Model):
     price = models.IntegerField()
     stock = models.IntegerField()
     is_active = models.BooleanField(default='True')
+    offer_price = models.PositiveSmallIntegerField(default=0,null=True)
 
     def __str__(self):
         return f"{self.book_id.title} {self.language_variant} {self.cover_type}"

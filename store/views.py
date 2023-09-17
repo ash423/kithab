@@ -144,14 +144,18 @@ def product_details(request, book_id, variantid):
     cover_type_variants =book.variant_set.filter(language_variant=language)
     language_variants = book.variant_set.select_related('language_variant').distinct('language_variant')
     price = varian.price
+    offer_price = 0
 
-
+    if varian.book_id.category.offer_active:
+        offer = varian.book_id.category.offer
+        offer_price = (1-(offer/100))*varian.price
     context = {
         'book': book,
-        'variant' : varian,
+        'variant': varian,
         'cover_type_variants': cover_type_variants,
-        'language_variants':language_variants,
-        'price':price,
-        'Instock' :Instock
+        'language_variants': language_variants,
+        'price': price,
+        'Instock': Instock,
+        'offer_price': offer_price
     }
     return render(request, "book_store/productdetails.html",context)

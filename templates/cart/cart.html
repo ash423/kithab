@@ -84,7 +84,11 @@
                                     <span class="styled-span">Language: {{ item.variant.language_variant }}</span>
                                 </div>
                             </td>
+                            {% if item.variant.book_id.category.offer_active %}
+                            <td class="align-middle">₹{{ item.variant.offer_price }}</td>
+                            {% else %}
                             <td class="align-middle">₹{{ item.variant.price }}</td>
+                            {% endif %}
 
                             <td class="align-middle">
                                 <div class="d-flex align-items-center">

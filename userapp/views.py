@@ -28,13 +28,13 @@ def signin(request):
         pass1 = request.POST['pass1']
 
         user = authenticate(username=username, password=pass1)
-        print(user.username)
-        if user.is_superuser:
-            login(request,user)
-            return redirect('admindash')
         if user is not None :
+            if user.is_superuser:
+                login(request,user)
+                return redirect('admindash')
+
             login(request,user)
-            user =request.user
+            user = request.user
             guest_cart_id=request.session.get('cart_id')
             if guest_cart_id:
                 try:
@@ -50,7 +50,8 @@ def signin(request):
                             else:
                                 messages.error(request,f"Requested quantity for {guest_item.product} exceeds available stock")
                         except CartItem.DoesNotExist:
-                            CartItem.objects.create(cart=user_cart,variant=guest_item.variant,quantity=guest_item.quantity,price=guest_item.variant.price)
+
+                            CartItem.objects.create(cart=user_cart,variant=guest_item.variant,quantity=guest_item.quantity,price=guest_item.price)
                     guest_cart.delete()
                     del request.session['cart_id']
                 except Cart.DoesNotExist:
@@ -108,7 +109,7 @@ def signup(request):
         current_site =  get_current_site(request)
         uidb64 = urlsafe_base64_encode(force_bytes(myuser.pk))
         verification_url = reverse('verify_email',kwargs={'uidb64': uidb64,'token' : token})
-        verification_url =f"{request.scheme}://{current_site}{verification_url}"
+        verification_url =f"{request.scheme}://{current_site.domain}{verification_url}"
 
         #Send veriication email
         mail_subject = 'Activate your account'

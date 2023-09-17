@@ -236,9 +236,18 @@ def addcategory(request):
         name = request.POST['cname']
         img = request.FILES.get('img')
         desc = request.POST['desc']
+        if 'OfferCheckbox' in request.POST:
+            offer_active = True
+        else:
+            offer_active = False
+        offer = 0
+
+        if offer_active:
+
+            offer = request.POST.get('offerp')
 
 
-        category = Category(name=name,description=desc)
+        category = Category(name=name,description=desc,offer_active=offer_active,offer=offer)
         if img:
             category.image.save(img.name, img)
         category.save()
@@ -256,7 +265,18 @@ def editcategory(request,category_id):
         cat.name=name
         if img:
             cat.image.save(img.name, img)
-        cat.description =desc
+        cat.description = desc
+        if 'OfferCheckbox' in request.POST:
+            offer_active = True
+        else:
+            offer_active = False
+        offer = 0
+
+        if offer_active:
+
+            offer = request.POST.get('offerp')
+        cat.offer_active = offer_active
+        cat.offer = offer
         cat.save()
         return redirect('categorieslist')
     category = Category.objects.get(id=category_id)

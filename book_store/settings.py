@@ -156,19 +156,21 @@ INTERNAL_IPS = [
 
 ]
 
-RAZOR_KEY_ID='rzp_test_OZbsmCV6jIAr0B'
-RAZOR_KEY_SECRET='9zpIFiFxf29wFXS4506v3z0Z'
+RAZOR_KEY_ID = 'rzp_test_OZbsmCV6jIAr0B'
+RAZOR_KEY_SECRET = '9zpIFiFxf29wFXS4506v3z0Z'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOWED_ORIGINS = [
     "http://13.53.168.41",
-    "http://0.0.0.0:9090"
+    "http://0.0.0.0:9090",
+    "http://kithab.shop"
 ]
 # CSRF settings
 CSRF_TRUSTED_ORIGINS = [
     "http://13.53.168.41",
     "http://0.0.0.0:9090",
+    "http://kithab.shop"
 
     # Add more trusted origins here
 ]
